@@ -12,6 +12,7 @@ class GreetingController extends Controller
         $visitorName = $request->query('visitor_name', 'Guest');
         $clientIp = $request->ip();
 
+
         // Use a service to get the location based on IP
         $location = $this->getLocationByIp($clientIp);
 
@@ -49,7 +50,7 @@ class GreetingController extends Controller
     private function getTemperature($city)
     {
         $client = new Client();
-        $apiKey = '0f4a23c9847e4f23900165432240207'; // Use the provided API key
+        $apiKey = env("WEATHER_API_KEY");
         $response = $client->get("http://api.weatherapi.com/v1/current.json?key=$apiKey&q=$city");
         $data = json_decode($response->getBody(), true);
 
