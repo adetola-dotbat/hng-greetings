@@ -10,13 +10,12 @@ class GreetingController extends Controller
     public function greet(Request $request)
     {
         $visitorName = $request->query('visitor_name', 'Guest');
+        $visitorName = trim($visitorName, '"');
         $clientIp = $request->ip();
 
 
-        // Use a service to get the location based on IP
         $location = $this->getLocationByIp($clientIp);
 
-        // Check if location is valid
         if ($location['city'] === 'Unknown') {
             return response()->json([
                 'client_ip' => $clientIp,
@@ -25,7 +24,6 @@ class GreetingController extends Controller
             ]);
         }
 
-        // Use a weather API to get the current temperature
         $temperature = $this->getTemperature($location['city']);
 
         return response()->json([
